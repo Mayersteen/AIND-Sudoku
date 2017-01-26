@@ -37,12 +37,14 @@ A: I evaluated two ideas. First I tried to evaluate if the sum of every diagonal
 
 The local test runs as expected.
 
+```
 (aind) C:\Users\me\PycharmProjects\AIND-Sudoku>python solution_test.py
 ...
 ----------------------------------------------------------------------
 Ran 3 tests in 121.019s
 
 OK
+```
 
 ### Install
 
