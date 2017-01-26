@@ -3,11 +3,32 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: We need to scan all the horizontal and vertical neighbors of each box
+   to find neighbors whos values have a length of two. When the values
+   are equal, we can start to process them. It is important to distinguish
+   the vertical and horizontal peers from each other. If a match occurs
+   with a horizontal peer, then no vertical peer must be touched and vice
+   versa. My implementation is not tuned to efficiency, and the code is
+   no nice to look at as I am not used to Python due to a break of several
+   years.
 
 # Question 2 (Diagonal Sudoku)
-Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+Q: How do we use constraint propagation to solve the diagonal sudoku problem?
+A: I evaluated two ideas. First I tried to evaluate if the sum of every diagonal
+   is exactly 45 (based on (n(n+1))/2 ). This can however only be done when the
+   solution candidate is already solved completely. This means that even when
+   it is clear at the beginning that the sudoku hurts the diagonal constraint,
+   it must be processed until the end before it can be excluded as a viable
+   solution. My tests with this method finished after ~337 seconds and failed.
+
+   My second approach was to provide a procedure that is executed whenever
+   reduce_puzzle() within search() returns a result. The values with length 1
+   are evaluated for uniqueness within the two diagonals. When the uniqueness
+   constraint is hurt the candidate is skipped. This implementation took
+   ~185 seconds on my computer with naked_twins() disabled and finished
+   successfully. With naked_twins() enabled the runtime was ~203 seconds
+   and finished successfully. As the solution without naked_twins() is faster
+   I disabled it for the first commit.
 
 ### Install
 
