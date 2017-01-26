@@ -25,6 +25,8 @@ diagonalA = [(rows[index] + cols[index]) for index in range(0,9)]
 
 diagonalB = [(rows[index] + str(10-int(cols[index]))) for index in range(0,9)]
 
+solved_values_already_processed = set()
+
 # -----------------------------------------------------------------------------
 
 def assign_value(values, box, value):
@@ -57,6 +59,7 @@ def naked_twins(values):
 
         # Iterate over the peers and try to find a peer with size two that is
         # in the same column or row and has the same value.
+
         for peer in peers[box]:
 
             # Skip peer if its values length is not two.
@@ -71,17 +74,15 @@ def naked_twins(values):
             if box[0] == peer[0]:
                 for candidate in units[box][0]:
                     if candidate != peer and candidate != box:
-                        for digit in values[box]:
-                            values[candidate] = values[candidate].replace(digit, '')
+                        for value in values[box]:
+                            values[candidate] = values[candidate].replace(value, '')
 
             # Peer is in the same column.
             elif box[1] == peer[1]:
                 for candidate in units[box][1]:
                     if candidate != peer and candidate != box:
-                        for digit in values[box]:
-                            values[candidate] = values[candidate].replace(digit, '')
-
-            # eliminate neighbor peers that don't have the exact same value
+                        for value in values[box]:
+                            values[candidate] = values[candidate].replace(value, '')
 
     return values
 
@@ -143,15 +144,14 @@ def eliminate(values):
     """
 
     # create an array that stores all the boxes that include only one value
-    solved_values = [box for box in values.keys() if len(values[box]) == 1]
+    solved_values = [box for box in values.keys() if len(values[box]) == 1 and box not in solved_values_already_processed]
 
     # iterate over all the solved boxes and clear the value of the box from
     # all of its peers.
     for box in solved_values:
+        solved_values_already_processed.add(box)
         for peer in peers[box]:
-#            values[peer] = values[peer].replace(values[box], '')
-            for value in values[box]:
-                values[peer] = values[peer].replace(value, '')
+            values[peer] = values[peer].replace(values[box], '')
 
     return values
 
@@ -200,14 +200,14 @@ def reduce_puzzle(values):
         # Store the number of solved values before the strategies were applied.
         solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
 
+#        # Apply Naked Twins Strategy
+#        values = naked_twins(values)
+
         # Apply Eliminate Strategy
         values = eliminate(values)
 
         # Apply Only Choice Strategy
         values = only_choice(values)
-
-        # Apply Naked Twins Strategy
-        values = naked_twins(values)
 
         # Store the number of solved values after the strategies were applied.
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
@@ -267,12 +267,11 @@ def checkDiagonalConstraint(diagonal, values):
     seen = []
 
     for box in diagonal:
-        if len(values[box]) != 1:
-            continue  # skip values with length not 1
-        for value in values[box]:
-            if value in seen:
-                return True  # if value was already seen, return true
-            seen.append(value)
+        if len(values[box]) == 1:
+            for value in values[box]:
+                if value in seen:
+                    return True  # if value was already seen, return true
+                seen.append(value)
 
     return False
 
@@ -280,6 +279,8 @@ def checkDiagonalConstraint(diagonal, values):
 
 def search(values):
     "Using depth-first search and propagation, create a search tree and solve the sudoku."
+
+    solved_values_already_processed.clear()
 
     # First, reduce the puzzle using the previous function
     values = reduce_puzzle(values)

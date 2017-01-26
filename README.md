@@ -30,6 +30,9 @@ A: I evaluated two ideas. First I tried to evaluate if the sum of every diagonal
    and finished successfully. As the solution without naked_twins() is faster
    I disabled it for the first commit.
 
+   After adding an improvement to the eliminate() method, the runtime
+   improved to ~120 seconds.
+
 ### Install
 
 This project requires **Python 3**.
