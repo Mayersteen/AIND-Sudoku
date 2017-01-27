@@ -13,7 +13,7 @@ A: We need to scan all the horizontal and vertical neighbors of each box
    years.
 
 # Question 2 (Diagonal Sudoku)
-Q: How do we use constraint propagation to solve the diagonal sudoku problem?
+Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
 A: I evaluated two ideas. First I tried to evaluate if the sum of every diagonal
    is exactly 45 (based on (n(n+1))/2 ). This can however only be done when the
    solution candidate is already solved completely. This means that even when
