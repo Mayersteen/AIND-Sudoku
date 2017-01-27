@@ -200,14 +200,14 @@ def reduce_puzzle(values):
         # Store the number of solved values before the strategies were applied.
         solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
 
-#        # Apply Naked Twins Strategy
-#        values = naked_twins(values)
-
         # Apply Eliminate Strategy
         values = eliminate(values)
 
         # Apply Only Choice Strategy
         values = only_choice(values)
+
+        # Apply Naked Twins Strategy
+        #values = naked_twins(values)
 
         # Store the number of solved values after the strategies were applied.
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
@@ -220,21 +220,6 @@ def reduce_puzzle(values):
             return False
 
     return values
-
-# -----------------------------------------------------------------------------
-
-def solve(grid):
-    """
-    Solves a sudoku puzzle by calling the search function. Should the grid
-    be a string, then the search method must be called with an additional
-    grid_values call. This is due to the UnitTest implementation.
-    Input: grid as string or dict
-    Output: solution to the sudoku riddle
-    """
-#    if isinstance(grid, str):
-#        return search(grid_values(grid))
-
-    return search(grid)
 
 # -----------------------------------------------------------------------------
 
